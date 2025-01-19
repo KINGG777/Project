@@ -23,7 +23,6 @@ const Books = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/books/${id}`);
-      // Remove the book from the UI without reloading
       setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
     } catch (error) {
       console.error("Error deleting book:", error);
@@ -32,26 +31,41 @@ const Books = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}> KINGG </h1>
+      <header style={styles.header}>
+        <h1 style={styles.title}>Book Management System</h1>
+      </header>
       <div style={styles.gridContainer}>
         {books.map((book) => (
-          <div key={book.id} style={styles.card}>
-            <img src={book.cover} alt={book.title} style={styles.image} />
-            <h2 style={styles.title}>{book.title}</h2>
-            <p style={styles.description}>{book.desc}</p>
-            <span style={styles.price}>Price: ${book.price}</span>
-            <div style={styles.actions}>
-              <button
-                style={styles.deleteButton}
-                onClick={() => handleDelete(book.id)}
-              >
-                Delete
-              </button>
-              <button style={styles.updateButton}>
-                <Link to={`/update/${book.id}`} style={styles.link}>
-                  Update
-                </Link>
-              </button>
+          <div
+            key={book.id}
+            style={styles.card}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform =
+                "scale(1.05) perspective(1000px) rotateX(-3deg) rotateY(3deg)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.transform =
+                "scale(1) perspective(1000px) rotateX(0deg) rotateY(0deg)")
+            }
+          >
+            <div style={styles.cardContent}>
+              <img src={book.cover} alt={book.title} style={styles.image} />
+              <h2 style={styles.bookTitle}>{book.title}</h2>
+              <p style={styles.bookDesc}>{book.desc}</p>
+              <span style={styles.bookPrice}>Price: ${book.price}</span>
+              <div style={styles.buttonContainer}>
+                <button
+                  style={styles.deleteButton}
+                  onClick={() => handleDelete(book.id)}
+                >
+                  Delete
+                </button>
+                <button style={styles.updateButton}>
+                  <Link to={`/update/${book.id}`} style={styles.link}>
+                    Update
+                  </Link>
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -67,77 +81,89 @@ const Books = () => {
 
 const styles = {
   container: {
-    fontFamily: "Arial, sans-serif",
+    fontFamily: "'Poppins', sans-serif",
+    backgroundColor: "#f0f8ff",
     padding: "20px",
-    backgroundColor: "#f4f4f9",
     minHeight: "100vh",
   },
-  heading: {
+  header: {
     textAlign: "center",
-    fontSize: "2.5rem",
-    color: "#333",
     marginBottom: "20px",
+  },
+  title: {
+    fontSize: "3rem",
+    fontWeight: "700",
+    color: "#333",
+    textShadow: "2px 2px 5px rgba(0, 0, 0, 0.3)",
   },
   gridContainer: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "20px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: "30px",
     padding: "20px",
   },
   card: {
-    backgroundColor: "#fff",
-    borderRadius: "10px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    overflow: "hidden",
-    textAlign: "center",
-    padding: "15px",
-    transition: "transform 0.3s",
+    backgroundColor: "#ffffff",
+    borderRadius: "15px",
+    boxShadow: "0 10px 15px rgba(0, 0, 0, 0.2)",
+    transform: "scale(1) perspective(1000px) rotateX(0) rotateY(0)",
+    transition: "transform 0.5s, box-shadow 0.5s",
+    cursor: "pointer",
   },
-  cardHover: {
-    transform: "scale(1.05)",
+  cardContent: {
+    padding: "20px",
+    textAlign: "center",
   },
   image: {
     width: "100%",
     height: "200px",
     objectFit: "cover",
-    borderRadius: "10px",
-  },
-  title: {
-    fontSize: "1.5rem",
-    margin: "10px 0",
-    color: "#444",
-  },
-  description: {
-    fontSize: "1rem",
-    color: "#666",
-    marginBottom: "10px",
-  },
-  price: {
-    fontSize: "1rem",
-    color: "#28a745",
-    fontWeight: "bold",
+    borderRadius: "15px",
     marginBottom: "15px",
   },
-  actions: {
+  bookTitle: {
+    fontSize: "1.5rem",
+    fontWeight: "600",
+    color: "#444",
+    marginBottom: "10px",
+  },
+  bookDesc: {
+    fontSize: "1rem",
+    color: "#666",
+    marginBottom: "15px",
+  },
+  bookPrice: {
+    fontSize: "1.2rem",
+    fontWeight: "700",
+    color: "#28a745",
+    marginBottom: "20px",
+  },
+  buttonContainer: {
     display: "flex",
     justifyContent: "space-around",
-    marginTop: "10px",
+    marginTop: "15px",
   },
   deleteButton: {
     backgroundColor: "#dc3545",
     color: "#fff",
     border: "none",
-    padding: "10px 20px",
-    borderRadius: "5px",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    fontSize: "1rem",
     cursor: "pointer",
+    boxShadow: "2px 4px 6px rgba(0, 0, 0, 0.2)",
+    transition: "transform 0.3s, box-shadow 0.3s",
   },
   updateButton: {
     backgroundColor: "#007bff",
     color: "#fff",
     border: "none",
-    padding: "10px 20px",
-    borderRadius: "5px",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    fontSize: "1rem",
     cursor: "pointer",
+    boxShadow: "2px 4px 6px rgba(0, 0, 0, 0.2)",
+    transition: "transform 0.3s, box-shadow 0.3s",
   },
   link: {
     color: "inherit",
@@ -145,15 +171,17 @@ const styles = {
   },
   addContainer: {
     textAlign: "center",
-    marginTop: "20px",
+    marginTop: "30px",
   },
   addLink: {
     backgroundColor: "#17a2b8",
     color: "#fff",
-    padding: "12px 20px",
+    padding: "12px 25px",
+    borderRadius: "10px",
     textDecoration: "none",
-    borderRadius: "5px",
-    fontSize: "1.2rem",
+    fontSize: "1.5rem",
+    fontWeight: "600",
+    boxShadow: "2px 4px 8px rgba(0, 0, 0, 0.2)",
   },
 };
 
