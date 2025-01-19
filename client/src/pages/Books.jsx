@@ -32,7 +32,7 @@ const Books = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>Book Management System</h1>
+      <h1 style={styles.heading}>KINGG</h1>
       <div style={styles.gridContainer}>
         {books.map((book) => (
           <div key={book.id} style={styles.card}>
