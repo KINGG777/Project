@@ -1,0 +1,9 @@
+stage("DockerHub Image Pushing") {
+    steps {
+        script {
+            sh 'docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}'
+            sh 'docker tag ${AWS_ECR_REPO_NAME} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO_NAME}:${BUILD_NUMBER}'
+            sh 'docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO_NAME}:${BUILD_NUMBER}'
+        }
+    }
+}
