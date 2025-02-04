@@ -35,6 +35,11 @@ const Books = () => {
     }
   };
 
+  // Adding new book
+  const handleAddBook = () => {
+    window.location.href = "/add"; // Redirect to add new book page
+  };
+
   if (loading) {
     return (
       <div style={styles.loading}>
@@ -57,15 +62,17 @@ const Books = () => {
   return (
     <div style={styles.container}>
       <header style={styles.header}>
-        <h1 style={styles.title}>Book Management System</h1>
+        <h1 style={styles.title}>DevOps Project</h1>
+        <p style={styles.creator}>Created by KINGG</p> {/* Added creator name */}
       </header>
+
+      <button onClick={handleAddBook} style={styles.addBookButton}>
+        Add New Book
+      </button>
 
       {books.length === 0 ? (
         <div style={styles.noBooks}>
           <h2>No books found. Start adding some!</h2>
-          <Link to="/add" style={styles.addLink}>
-            Add New Book
-          </Link>
         </div>
       ) : (
         <div style={styles.gridContainer}>
@@ -94,13 +101,6 @@ const Books = () => {
           ))}
         </div>
       )}
-
-      {/* Add Book Button */}
-      <div style={styles.addBookButtonContainer}>
-        <Link to="/add" style={styles.addBookButton}>
-          Add New Book
-        </Link>
-      </div>
     </div>
   );
 };
@@ -108,97 +108,106 @@ const Books = () => {
 const styles = {
   container: {
     padding: "20px",
+    backgroundColor: "#f4f4f4",
+    fontFamily: "Arial, sans-serif",
   },
   header: {
+    backgroundColor: "#2d2d2d",
+    color: "white",
+    padding: "10px 20px",
+    borderRadius: "5px",
     textAlign: "center",
-    marginBottom: "20px",
   },
   title: {
-    fontSize: "2rem",
+    fontSize: "36px",
+    margin: 0,
+  },
+  creator: {
+    fontSize: "14px",
+    color: "#ffcc00", // Highlighting the creator name
+    marginTop: "5px",
+  },
+  addBookButton: {
+    display: "block",
+    width: "200px",
+    margin: "20px auto",
+    padding: "10px",
+    backgroundColor: "#ff5722",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    fontSize: "16px",
+    cursor: "pointer",
   },
   gridContainer: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
     gap: "20px",
   },
   card: {
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "white",
     padding: "10px",
     borderRadius: "8px",
-    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   },
   cardContent: {
     textAlign: "center",
   },
   image: {
     width: "100%",
-    height: "200px",
-    objectFit: "cover",
-    borderRadius: "8px",
+    height: "auto",
+    borderRadius: "5px",
   },
   bookTitle: {
-    fontSize: "1.2rem",
+    fontSize: "20px",
+    fontWeight: "bold",
     margin: "10px 0",
   },
   bookDesc: {
-    fontSize: "1rem",
+    fontSize: "16px",
     color: "#555",
-    marginBottom: "10px",
   },
   bookPrice: {
-    fontSize: "1rem",
-    fontWeight: "bold",
+    fontSize: "18px",
+    color: "#333",
+    marginBottom: "10px",
   },
   buttonContainer: {
-    marginTop: "10px",
+    display: "flex",
+    justifyContent: "space-between",
   },
   deleteButton: {
-    backgroundColor: "#e74c3c",
-    color: "#fff",
-    padding: "5px 10px",
+    backgroundColor: "#f44336",
+    color: "white",
     border: "none",
-    borderRadius: "5px",
+    padding: "10px",
     cursor: "pointer",
+    borderRadius: "5px",
   },
   updateButton: {
-    backgroundColor: "#3498db",
-    color: "#fff",
-    padding: "5px 10px",
+    backgroundColor: "#4caf50",
+    color: "white",
     border: "none",
-    borderRadius: "5px",
+    padding: "10px",
     cursor: "pointer",
-    marginLeft: "10px",
+    borderRadius: "5px",
   },
   link: {
     textDecoration: "none",
-    color: "#fff",
-  },
-  addLink: {
-    color: "#3498db",
-    textDecoration: "none",
-  },
-  noBooks: {
-    textAlign: "center",
-  },
-  addBookButtonContainer: {
-    textAlign: "center",
-    marginTop: "20px",
-  },
-  addBookButton: {
-    backgroundColor: "#2ecc71",
-    color: "#fff",
-    padding: "10px 20px",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    textDecoration: "none",
+    color: "white",
   },
   loading: {
     textAlign: "center",
+    marginTop: "50px",
   },
   error: {
     textAlign: "center",
+    marginTop: "50px",
     color: "red",
+  },
+  noBooks: {
+    textAlign: "center",
+    marginTop: "50px",
   },
 };
 
