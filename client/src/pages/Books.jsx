@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import API_BASE_URL from "./config";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Initialize navigate
 
   // Fetch books from the database
   useEffect(() => {
@@ -35,9 +36,9 @@ const Books = () => {
     }
   };
 
-  // Adding new book
+  // Redirect to Add Book Page
   const handleAddBook = () => {
-    window.location.href = "/add"; // Redirect to add new book page
+    navigate("/add"); // Use navigate to go to the add book page
   };
 
   if (loading) {
@@ -62,7 +63,7 @@ const Books = () => {
   return (
     <div style={styles.container}>
       <header style={styles.header}>
-        <h1 style={styles.title}>DevOps Project</h1>
+        <h1 style={styles.title}>Book Management System</h1>
         <p style={styles.creator}>Created by KINGG</p> {/* Added creator name */}
       </header>
 
@@ -86,129 +87,4 @@ const Books = () => {
                 <div style={styles.buttonContainer}>
                   <button
                     style={styles.deleteButton}
-                    onClick={() => handleDelete(book.id)}
-                  >
-                    Delete
-                  </button>
-                  <button style={styles.updateButton}>
-                    <Link to={`/update/${book.id}`} style={styles.link}>
-                      Update
-                    </Link>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const styles = {
-  container: {
-    padding: "20px",
-    backgroundColor: "#f4f4f4",
-    fontFamily: "Arial, sans-serif",
-  },
-  header: {
-    backgroundColor: "#2d2d2d",
-    color: "white",
-    padding: "10px 20px",
-    borderRadius: "5px",
-    textAlign: "center",
-  },
-  title: {
-    fontSize: "36px",
-    margin: 0,
-  },
-  creator: {
-    fontSize: "14px",
-    color: "#ffcc00", // Highlighting the creator name
-    marginTop: "5px",
-  },
-  addBookButton: {
-    display: "block",
-    width: "200px",
-    margin: "20px auto",
-    padding: "10px",
-    backgroundColor: "#ff5722",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    fontSize: "16px",
-    cursor: "pointer",
-  },
-  gridContainer: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-    gap: "20px",
-  },
-  card: {
-    backgroundColor: "white",
-    padding: "10px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  },
-  cardContent: {
-    textAlign: "center",
-  },
-  image: {
-    width: "100%",
-    height: "auto",
-    borderRadius: "5px",
-  },
-  bookTitle: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    margin: "10px 0",
-  },
-  bookDesc: {
-    fontSize: "16px",
-    color: "#555",
-  },
-  bookPrice: {
-    fontSize: "18px",
-    color: "#333",
-    marginBottom: "10px",
-  },
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  deleteButton: {
-    backgroundColor: "#f44336",
-    color: "white",
-    border: "none",
-    padding: "10px",
-    cursor: "pointer",
-    borderRadius: "5px",
-  },
-  updateButton: {
-    backgroundColor: "#4caf50",
-    color: "white",
-    border: "none",
-    padding: "10px",
-    cursor: "pointer",
-    borderRadius: "5px",
-  },
-  link: {
-    textDecoration: "none",
-    color: "white",
-  },
-  loading: {
-    textAlign: "center",
-    marginTop: "50px",
-  },
-  error: {
-    textAlign: "center",
-    marginTop: "50px",
-    color: "red",
-  },
-  noBooks: {
-    textAlign: "center",
-    marginTop: "50px",
-  },
-};
-
-export default Books;
+                    onClick={() => handleDelet
