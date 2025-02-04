@@ -44,7 +44,7 @@ pipeline {
         stage('Update Deployment file') {
             environment {
                 GIT_REPO_NAME = "Project"
-                GIT_USER_NAME = "KINGG7777"
+                GIT_USER_NAME = "KINGG777"
             }
             steps {
                 dir('kubernetes-files') {
