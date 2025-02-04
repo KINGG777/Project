@@ -57,7 +57,7 @@ const Books = () => {
   return (
     <div style={styles.container}>
       <header style={styles.header}>
-        <h1 style={styles.title}>Book Management System</h1>
+        <h1 style={styles.title}>DevOps Project KINGG</h1>
       </header>
 
       {books.length === 0 ? (
