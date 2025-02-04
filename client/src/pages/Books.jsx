@@ -94,12 +94,112 @@ const Books = () => {
           ))}
         </div>
       )}
+
+      {/* Add Book Button */}
+      <div style={styles.addBookButtonContainer}>
+        <Link to="/add" style={styles.addBookButton}>
+          Add New Book
+        </Link>
+      </div>
     </div>
   );
 };
 
 const styles = {
-  // CSS styles (same as before)
+  container: {
+    padding: "20px",
+  },
+  header: {
+    textAlign: "center",
+    marginBottom: "20px",
+  },
+  title: {
+    fontSize: "2rem",
+  },
+  gridContainer: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+    gap: "20px",
+  },
+  card: {
+    backgroundColor: "#f4f4f4",
+    padding: "10px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+  },
+  cardContent: {
+    textAlign: "center",
+  },
+  image: {
+    width: "100%",
+    height: "200px",
+    objectFit: "cover",
+    borderRadius: "8px",
+  },
+  bookTitle: {
+    fontSize: "1.2rem",
+    margin: "10px 0",
+  },
+  bookDesc: {
+    fontSize: "1rem",
+    color: "#555",
+    marginBottom: "10px",
+  },
+  bookPrice: {
+    fontSize: "1rem",
+    fontWeight: "bold",
+  },
+  buttonContainer: {
+    marginTop: "10px",
+  },
+  deleteButton: {
+    backgroundColor: "#e74c3c",
+    color: "#fff",
+    padding: "5px 10px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  },
+  updateButton: {
+    backgroundColor: "#3498db",
+    color: "#fff",
+    padding: "5px 10px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    marginLeft: "10px",
+  },
+  link: {
+    textDecoration: "none",
+    color: "#fff",
+  },
+  addLink: {
+    color: "#3498db",
+    textDecoration: "none",
+  },
+  noBooks: {
+    textAlign: "center",
+  },
+  addBookButtonContainer: {
+    textAlign: "center",
+    marginTop: "20px",
+  },
+  addBookButton: {
+    backgroundColor: "#2ecc71",
+    color: "#fff",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    textDecoration: "none",
+  },
+  loading: {
+    textAlign: "center",
+  },
+  error: {
+    textAlign: "center",
+    color: "red",
+  },
 };
 
 export default Books;
