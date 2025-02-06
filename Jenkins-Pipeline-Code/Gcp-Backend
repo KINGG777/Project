@@ -19,7 +19,7 @@ pipeline {
         stage("Docker Image Build") {
             steps {
                 script {
-                    dir('client') {
+                    dir('backend') {
                             sh 'docker system prune -f'
                             sh 'docker container prune -f'
                             sh 'docker build -t ${REPOSITORY_URI} .'
