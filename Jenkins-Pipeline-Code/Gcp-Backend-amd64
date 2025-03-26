@@ -1,0 +1,75 @@
+pipeline {
+    agent any 
+    tools {
+        jdk 'jdk'
+        nodejs 'nodejs'
+    }
+    environment {
+        GCP_PROJECT_ID = credentials('GCP_PROJECT_ID') // GCP project ID from Jenkins credentials
+        GCR_REPO_NAME = credentials('GCR_REPO2') // GCR repository name from Jenkins credentials
+        GCP_DEFAULT_REGION = 'us-central1'
+        REPOSITORY_URI = "gcr.io/${GCP_PROJECT_ID}/${GCR_REPO_NAME}"
+    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/KINGG777/Project.git'
+            }
+        }
+        stage("Docker Image Build") {
+            steps {
+                script {
+                    dir('backend') {
+                        echo "🔹 Cleaning up old Docker resources"
+                        sh 'docker system prune -f || true'
+                        sh 'docker container prune -f || true'
+
+                        echo "🔹 Building Docker image: ${REPOSITORY_URI}:${BUILD_NUMBER}"
+                        sh 'docker build --platform linux/amd64 -t ${REPOSITORY_URI}:${BUILD_NUMBER} .'
+                    }
+                }
+            }
+        }
+        stage("GCR Image Pushing") {
+            steps {
+                script {
+                    echo "🔹 Authenticating with GCR"
+                    sh 'gcloud auth configure-docker --quiet'
+
+                    echo "🔹 Tagging image ${REPOSITORY_URI}:${BUILD_NUMBER}"
+                    sh 'docker tag ${REPOSITORY_URI}:${BUILD_NUMBER} ${REPOSITORY_URI}:latest'
+
+                    echo "🔹 Pushing image to GCR: ${REPOSITORY_URI}:${BUILD_NUMBER}"
+                    sh 'docker push ${REPOSITORY_URI}:${BUILD_NUMBER}'
+                    sh 'docker push ${REPOSITORY_URI}:latest'
+                }
+            }
+        }
+        stage('Update Deployment File') {
+            environment {
+                GIT_REPO_NAME = "Project"
+                GIT_USER_NAME = "KINGG777"
+            }
+            steps {
+                dir('kubernetes-files') {
+                    withCredentials([string(credentialsId: 'my-git-pattoken', variable: 'git_token')]) {
+                        script {
+                            echo "🔹 Configuring Git"
+                            sh '''
+                                git config user.email "pramodbehera777@gmail.com"
+                                git config user.name "KINGG777"
+
+                                echo "🔹 Updating Kubernetes deployment file"
+                                sed -i "s#image:.*#image: ${REPOSITORY_URI}:${BUILD_NUMBER}#g" backend-deployment.yaml
+
+                                git add .
+                                git commit -m "Update backend deployment image to ${REPOSITORY_URI}:${BUILD_NUMBER}"
+                                git push https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
