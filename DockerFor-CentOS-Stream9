@@ -21,7 +21,7 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 
-gke ckuster creation
+#gke ckuster creation
 
 gcloud container clusters create kingg \
   --region=us-central1 \
@@ -32,7 +32,12 @@ gcloud container clusters create kingg \
   --max-nodes=3 \
   --disk-size=50GB \
   --enable-ip-alias
+#kubectl installation and auth plugin
 sudo yum install kubectl -y
 sudo yum install -y google-cloud-sdk-gke-gcloud-auth-plugin
 
+#Add Jenkins user to docker group
 
+sudo usermod -aG docker jenkins
+sudo systemctl restart jenkins
+sudo systemctl restart docker
