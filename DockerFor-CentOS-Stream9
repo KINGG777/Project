@@ -21,3 +21,18 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 
+gke ckuster creation
+
+gcloud container clusters create kingg \
+  --region=us-central1 \
+  --num-nodes=2 \
+  --machine-type=e2-standard-2 \
+  --enable-autoscaling \
+  --min-nodes=1 \
+  --max-nodes=3 \
+  --disk-size=50GB \
+  --enable-ip-alias
+sudo yum install kubectl -y
+sudo yum install -y google-cloud-sdk-gke-gcloud-auth-plugin
+
+
