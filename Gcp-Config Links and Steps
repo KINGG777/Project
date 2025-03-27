@@ -1,3 +1,7 @@
+#Java
+
+sudo yum install -y java-17-openjdk
+
 # Install required dependencies
 yum install -y yum-utils
 
@@ -17,25 +21,20 @@ docker --version
 
 #kebectl on gcp centos
 
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
-chmod +x kubectl
-sudo mv kubectl /usr/local/bin/
+sudo curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/kubectl
+sudo chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin
+export PATH=$PATH:/usr/local/bin
 
 #gke ckuster creation
 
-gcloud container clusters create kingg-cluster --zone us-central1 --machine-type e2-standard-4 --num-nodes 3 --enable-ip-alias
-
-Or
-
-gcloud container clusters create kingg \
-  --region=us-central1 \
-  --num-nodes=2 \
-  --machine-type=e2-standard-2 \
-  --enable-autoscaling \
-  --min-nodes=1 \
-  --max-nodes=3 \
-  --disk-size=50GB \
+gcloud container clusters create kingg-cluster \
+  --zone us-central1 \
+  --machine-type e2-standard-2 \
+  --num-nodes 2 \
+  --disk-size 50 \
   --enable-ip-alias
+
 #kubectl installation and auth plugin
 sudo yum install kubectl -y
 sudo yum install -y google-cloud-sdk-gke-gcloud-auth-plugin
