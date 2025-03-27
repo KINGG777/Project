@@ -25,6 +25,7 @@ sudo curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-0
 sudo chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin
 export PATH=$PATH:/usr/local/bin
+sudo yum install -y google-cloud-sdk-gke-gcloud-auth-plugin
 
 #gke ckuster creation
 
@@ -35,12 +36,13 @@ gcloud container clusters create kingg-cluster \
   --disk-size 50 \
   --enable-ip-alias
 
-#kubectl installation and auth plugin
-sudo yum install kubectl -y
-sudo yum install -y google-cloud-sdk-gke-gcloud-auth-plugin
-
-#Add Jenkins user to docker group
-
+#Jenkins Installation
+sudo yum install wget -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum install jenkins -y
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
 sudo usermod -aG docker jenkins
 sudo systemctl restart jenkins
 sudo systemctl restart docker
