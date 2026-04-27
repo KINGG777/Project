@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: gcr.io/kingg-gcp/frontend:1
+        image: 717279717188.dkr.ecr.us-east-1.amazonaws.com/frontend:14
         ports:
         - containerPort: 80
           # env:
