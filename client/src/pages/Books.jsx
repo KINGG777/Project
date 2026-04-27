@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 // ✅ IMPORTANT: use Kubernetes service name
-const API_BASE_URL = "http://backend:5000";
+const API_BASE_URL = "http://ok.pkdevops.online";
 
 const Books = () => {
   const [books, setBooks] = useState([]); // always array
