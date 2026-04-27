@@ -74,7 +74,7 @@ pipeline {
         }
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/KINGG777/2026project.git'
+                git branch: 'main', url: 'https://github.com/KINGG777/Project.git'
             }
         }
         stage('Update Deployment file') {
