@@ -7,7 +7,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "kinggaws"
+    bucket = "projectdev1234"
     key    = "eks/terraform.tfstate"
     region = "us-east-1"
   }
