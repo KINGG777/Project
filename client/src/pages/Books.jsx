@@ -1,82 +1,79 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
-// ✅ IMPORTANT: use Kubernetes service name
-const API_BASE_URL = "http://ok.pkdevops.online";
+import API_BASE_URL from "./config";
 
 const Books = () => {
-  const [books, setBooks] = useState([]); // always array
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [books, setBooks] = useState([]);
 
   useEffect(() => {
     const fetchAllBooks = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/books`);
+        const res = await axios.get(`${API_BASE_URL}/books`);
 
-        console.log("API RESPONSE:", response.data); // debug
+        console.log("API RESPONSE:", res.data); // ✅ debug
 
-        // ✅ SAFE handling (fixes your error)
-        const booksData = Array.isArray(response.data)
-          ? response.data
-          : response.data.data || [];
+        // ✅ FIX: ensure always array
+        const booksData = Array.isArray(res.data)
+          ? res.data
+          : res.data.data || [];
 
         setBooks(booksData);
       } catch (err) {
-        console.error("Error fetching books:", err);
-        setError("Backend/API not reachable");
-      } finally {
-        setLoading(false);
+        console.log("API ERROR:", err);
       }
     };
-
     fetchAllBooks();
   }, []);
+
+  console.log(books);
 
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/books/${id}`);
-      setBooks((prev) => prev.filter((book) => book.id !== id));
+      window.location.reload();
     } catch (err) {
-      console.error("Delete error:", err);
+      console.log(err);
     }
   };
 
-  if (loading) return <h2 style={{ textAlign: "center" }}>Loading...</h2>;
-
-  if (error)
-    return (
-      <div style={{ textAlign: "center", color: "red" }}>
-        <h2>{error}</h2>
-      </div>
-    );
-
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 style={{ textAlign: "center" }}>DevOps Project KINGG</h1>
+    <div>
+      <h1>Welcomt to MultiCloud with DevSecOps Training by VEERA Nareshit 6 months </h1>
 
-      {/* ✅ SAFE RENDER */}
-      {Array.isArray(books) && books.length > 0 ? (
-        <div style={{ display: "grid", gap: "20px" }}>
-          {books.map((book) => (
-            <div key={book.id} style={{ border: "1px solid #ccc", padding: "10px" }}>
+      <div className="books">
+        {/* ✅ FIX: prevent crash */}
+        {Array.isArray(books) &&
+          books.map((book) => (
+            <div key={book.id} className="book">
+              <img src={book.cover} alt="" />
               <h2>{book.title}</h2>
               <p>{book.desc}</p>
-              <p>Price: {book.price}</p>
+              <span>${book.price}</span>
 
-              <button onClick={() => handleDelete(book.id)}>Delete</button>
-              <Link to={`/update/${book.id}`}>Update</Link>
+              <button className="delete" onClick={() => handleDelete(book.id)}>
+                Delete
+              </button>
+
+              <button className="update">
+                <Link
+                  to={`/update/${book.id}`}
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
+                  Update
+                </Link>
+              </button>
             </div>
           ))}
-        </div>
-      ) : (
-        <h2 style={{ textAlign: "center" }}>No books found</h2>
-      )}
-
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <Link to="/add">Add Book</Link>
       </div>
+
+      <button className="addHome">
+        <Link to="/add" style={{ color: "inherit", textDecoration: "none" }}>
+          Add new book
+        </Link>
+      </button>
     </div>
   );
 };
