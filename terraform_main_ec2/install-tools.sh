@@ -67,7 +67,9 @@ sudo chmod 777 /var/run/docker.sock
 
 
 #----------------------Trivy install---------------
-sudo rpm -ivh https://github.com/aquasecurity/trivy/releases/download/v0.48.3/trivy_0.48.3_Linux-64bit.rpm
+VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | grep tag_name | cut -d '"' -f4)
+
+sudo rpm -ivh https://github.com/aquasecurity/trivy/releases/download/${VERSION}/trivy_${VERSION#v}_Linux-64bit.rpm
 
 #------------------Docker install-------------
 #sudo amazon-linux-extras install docker #linux 2022
