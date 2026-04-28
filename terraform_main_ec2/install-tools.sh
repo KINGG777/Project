@@ -67,10 +67,17 @@ sudo chmod 777 /var/run/docker.sock
 
 
 #----------------------Trivy install---------------
-VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | grep tag_name | cut -d '"' -f4)
+#----------------------Trivy install (recommended)---------------
+cat <<EOF | sudo tee /etc/yum.repos.d/trivy.repo
+[trivy]
+name=Trivy repository
+baseurl=https://aquasecurity.github.io/trivy-repo/rpm/releases/\$releasever/\$basearch/
+gpgcheck=1
+enabled=1
+gpgkey=https://aquasecurity.github.io/trivy-repo/rpm/public.key
+EOF
 
-sudo rpm -ivh https://github.com/aquasecurity/trivy/releases/download/${VERSION}/trivy_${VERSION#v}_Linux-64bit.rpm
-
+sudo yum install trivy -y
 #------------------Docker install-------------
 #sudo amazon-linux-extras install docker #linux 2022
 

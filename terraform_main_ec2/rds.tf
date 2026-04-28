@@ -3,7 +3,7 @@ resource "aws_db_instance" "rds" {
   identifier = "book-rds"
   db_subnet_group_name   = aws_db_subnet_group.sub-grp.id
   engine                 = "mysql"
-  engine_version         = "8.0.32"
+  engine_version         = "8.4.8"
   instance_class         = "db.t3.micro"
   multi_az               = true
   db_name                = "mydb"
