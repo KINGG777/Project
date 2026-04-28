@@ -2,7 +2,9 @@
 
 A complete production-style DevOps project demonstrating how to deploy a Three-Tier Application on AWS EKS using modern DevOps tools and GitOps practices.
 
-## 📌 Features
+---
+
+# 📌 Features
 
 - Infrastructure as Code with Terraform
 - CI/CD with Jenkins
@@ -17,7 +19,7 @@ A complete production-style DevOps project demonstrating how to deploy a Three-T
 
 ---
 
-## 🏗️ Project Architecture
+# 🏗️ Project Architecture
 
 ```text
 User
@@ -42,7 +44,7 @@ Amazon EKS
 
 ---
 
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
 
 - AWS EC2
 - AWS VPC
@@ -64,7 +66,7 @@ Amazon EKS
 
 ---
 
-## 📂 Clone Repository
+# 📂 Clone Repository
 
 ```bash
 git clone https://github.com/KINGG777/Project.git
@@ -73,7 +75,7 @@ cd Project
 
 ---
 
-## ⚙️ Configure AWS CLI
+# ⚙️ Configure AWS CLI
 
 ```bash
 aws configure
@@ -87,7 +89,7 @@ Use:
 
 ---
 
-## 🏗️ Deploy Infrastructure
+# 🏗️ Deploy Infrastructure
 
 ```bash
 cd terraform_main_ec2
@@ -95,14 +97,14 @@ terraform init
 terraform apply --auto-approve
 ```
 
-Update these values before apply:
+Before apply, update:
 
 - Key Pair Name
 - S3 Bucket Name
 
 ---
 
-## ✅ Terraform Creates
+# ✅ Terraform Creates
 
 - VPC
 - Public / Private Subnets
@@ -115,7 +117,7 @@ Update these values before apply:
 
 ---
 
-## 🖥️ Jump Host Auto Setup
+# 🖥️ Jump Host Auto Setup
 
 Installed automatically:
 
@@ -130,17 +132,17 @@ Installed automatically:
 
 ---
 
-## 🔐 Jenkins Access
+# 🔐 Jenkins Access
 
 ```text
 http://<JUMPHOST_PUBLIC_IP>:8080
 ```
 
-Complete initial setup and create admin user.
+Complete setup and create admin user.
 
 ---
 
-## 🔌 Required Jenkins Plugins
+# 🔌 Required Jenkins Plugins
 
 Install:
 
@@ -152,7 +154,58 @@ Install:
 
 ---
 
-## 🔧 Jenkins Credentials
+# 🔧 Jenkins Global Tool Configuration
+
+Go to:
+
+```text
+Manage Jenkins → Tools
+```
+
+Configure:
+
+## ☕ JDK
+
+- Name: `jdk`
+
+## 🟢 NodeJS
+
+- Name: `nodejs`
+
+## 🔍 SonarQube Scanner
+
+- Name: `sonar-scanner`
+
+Enable **Install Automatically** for all tools.
+
+---
+
+# ⚙️ Jenkins System Configuration
+
+Go to:
+
+```text
+Manage Jenkins → System
+```
+
+Scroll to **SonarQube Servers**
+
+Add:
+
+- Name: `sonarqube`
+- Server URL:
+
+```text
+http://<SONAR_SERVER_IP>:9000
+```
+
+- Server Authentication Token: `sonar-token`
+
+Click Save.
+
+---
+
+# 🔧 Jenkins Credentials
 
 Add Secret Text credentials:
 
@@ -161,21 +214,25 @@ Add Secret Text credentials:
 | ACCOUNT_ID | AWS Account ID |
 | ECR_REPO1 | frontend |
 | ECR_REPO2 | backend |
-| git-token | GitHub Token |
+| git_token | GitHub Token |
 | sonar-token | Sonar Token |
 
 ---
 
-## 🔍 SonarQube Setup
+# 🔍 SonarQube Setup
+
+Access:
 
 ```text
-http://<SERVER_IP>:9000
+http://<SONAR_SERVER_IP>:9000
 ```
 
 Create projects:
 
 - three-tier-frontend
 - three-tier-backend
+
+Generate token and save in Jenkins credentials.
 
 Webhook:
 
@@ -185,16 +242,18 @@ http://<JENKINS_IP>:8080/sonarqube-webhook/
 
 ---
 
-## 🐳 Create ECR Repositories
+# 🐳 Create Amazon ECR Repositories
+
+Create:
 
 - frontend
 - backend
 
 ---
 
-## 🌐 Route53 Setup
+# 🌐 Route53 Setup
 
-Create hosted zone for your domain.
+Create Hosted Zone for your domain.
 
 Example:
 
@@ -204,7 +263,7 @@ yourdomain.com
 
 ---
 
-## ⚠️ Update Frontend API URL
+# ⚠️ Update Frontend API URL
 
 File:
 
@@ -224,22 +283,18 @@ const API_BASE_URL = "http://yourdomain.com";
 
 ## 📌 Create EKS Infrastructure Pipeline
 
-1. Open Jenkins Dashboard  
-2. Click **New Item**  
-3. Enter Name:
+- New Item → Pipeline
+- Name:
 
 ```text
 eks-terraform
 ```
 
-4. Select **Pipeline**
-5. Click **OK**
+Configure:
 
-### Configure:
-
-- Definition: Pipeline script from SCM
+- Pipeline script from SCM
 - SCM: Git
-- Repository URL:
+- Repo:
 
 ```text
 https://github.com/KINGG777/Project.git
@@ -257,26 +312,24 @@ https://github.com/KINGG777/Project.git
 eks-terraform/Jenkinsfile
 ```
 
-Click **Save** → **Build Now**
+Save → Build Now
 
 ---
 
 ## 📌 Create Frontend Pipeline
 
-1. Click **New Item**
-2. Enter Name:
+- New Item → Pipeline
+- Name:
 
 ```text
 frontend-pipeline
 ```
 
-3. Select **Pipeline**
+Configure:
 
-### Configure:
-
-- Definition: Pipeline script from SCM
+- Pipeline script from SCM
 - SCM: Git
-- Repository URL:
+- Repo:
 
 ```text
 https://github.com/KINGG777/Project.git
@@ -291,29 +344,27 @@ https://github.com/KINGG777/Project.git
 - Script Path:
 
 ```text
-Jenkinsfile-frontend
+Jenkins-Pipeline-Code/Jenkins-Frontend
 ```
 
-Click **Save** → **Build Now**
+Save → Build Now
 
 ---
 
 ## 📌 Create Backend Pipeline
 
-1. Click **New Item**
-2. Enter Name:
+- New Item → Pipeline
+- Name:
 
 ```text
 backend-pipeline
 ```
 
-3. Select **Pipeline**
+Configure:
 
-### Configure:
-
-- Definition: Pipeline script from SCM
+- Pipeline script from SCM
 - SCM: Git
-- Repository URL:
+- Repo:
 
 ```text
 https://github.com/KINGG777/Project.git
@@ -328,28 +379,28 @@ https://github.com/KINGG777/Project.git
 - Script Path:
 
 ```text
-Jenkinsfile-backend
+Jenkins-Pipeline-Code/Jenkins-Backend
 ```
 
-Click **Save** → **Build Now**
+Save → Build Now
 
 ---
 
-## 🔄 Pipeline Workflows
+# 🔄 Pipeline Workflow
 
-### EKS Pipeline
+## EKS Pipeline
 
 ```text
 Terraform Init → Terraform Apply → Create EKS Cluster
 ```
 
-### Frontend Pipeline
+## Frontend Pipeline
 
 ```text
 Checkout → Sonar Scan → Trivy Scan → Docker Build → Push ECR → Update YAML
 ```
 
-### Backend Pipeline
+## Backend Pipeline
 
 ```text
 Checkout → Sonar Scan → Trivy Scan → Docker Build → Push ECR → Update YAML
@@ -357,7 +408,7 @@ Checkout → Sonar Scan → Trivy Scan → Docker Build → Push ECR → Update 
 
 ---
 
-## ☸️ Configure kubectl from Jump Host
+# ☸️ Configure kubectl from Jump Host
 
 ```bash
 ssh -i key.pem ec2-user@<JUMPHOST_PUBLIC_IP>
@@ -369,7 +420,7 @@ kubectl get nodes
 
 ---
 
-## ☸️ Create Namespaces
+# ☸️ Create Namespaces
 
 ```bash
 kubectl create namespace eks
@@ -379,7 +430,7 @@ kubectl create namespace prometheus
 
 ---
 
-## 🚀 Install ArgoCD
+# 🚀 Install ArgoCD
 
 ```bash
 kubectl apply --server-side -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -394,7 +445,7 @@ kubectl get svc -n argocd
 
 ---
 
-## 🔐 Get ArgoCD Password
+# 🔐 Get ArgoCD Password
 
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
@@ -406,23 +457,15 @@ Login:
 
 ---
 
-## 📦 Create ArgoCD Application
+# 🗄️ Configure Database Secret
 
-Use:
-
-- GitHub Repo URL
-- Path: `kubernetes-files`
-- Namespace: `eks`
-
----
-
-## 🗄️ Configure Database Secret
+Encode RDS endpoint:
 
 ```bash
 echo -n "your-rds-endpoint.amazonaws.com" | base64
 ```
 
-Paste encoded value into:
+Paste into:
 
 ```text
 kubernetes-files/secret.yaml
@@ -430,30 +473,55 @@ kubernetes-files/secret.yaml
 
 ---
 
-## 📥 Insert Dummy Data into RDS
+# 📥 Insert Dummy Data into RDS (Before ArgoCD App Creation)
+
+Install MySQL client:
 
 ```bash
 sudo dnf install mariadb105 -y
+```
 
+Import SQL:
+
+```bash
 mysql -h <RDS-ENDPOINT> -u admin -pPASSWORD < test.sql
 ```
 
 ---
 
-## 📊 Monitoring Setup
+# 📦 Create ArgoCD Application
+
+Use:
+
+- GitHub Repo URL
+- Path:
+
+```text
+kubernetes-files
+```
+
+- Namespace:
+
+```text
+eks
+```
+
+Enable auto sync if required.
+
+---
+
+# 📊 Monitoring Setup
 
 ```bash
 helm repo add stable https://charts.helm.sh/stable
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-
-kubectl create namespace prometheus
 
 helm install stable prometheus-community/kube-prometheus-stack -n prometheus
 ```
 
 ---
 
-## ⚠️ If Pods Pending
+# ⚠️ If Pods Pending
 
 ```bash
 eksctl scale nodegroup \
@@ -461,15 +529,23 @@ eksctl scale nodegroup \
 --region us-east-1 \
 --name project-node-group \
 --nodes 3
+```
 
+Check pods:
+
+```bash
 kubectl get pods -n prometheus -w
+```
 
+Restart Grafana if needed:
+
+```bash
 kubectl rollout restart deployment stable-grafana -n prometheus
 ```
 
 ---
 
-## 🌐 Expose Monitoring Services
+# 🌐 Expose Monitoring Services
 
 ```bash
 kubectl patch svc stable-kube-prometheus-sta-prometheus -n prometheus -p '{"spec":{"type":"LoadBalancer"}}'
@@ -479,7 +555,17 @@ kubectl patch svc stable-grafana -n prometheus -p '{"spec":{"type":"LoadBalancer
 
 ---
 
-## 🔐 Grafana Password
+# 🌍 Get Grafana URL
+
+```bash
+kubectl get svc -n prometheus
+```
+
+Use `EXTERNAL-IP` of Grafana service.
+
+---
+
+# 🔐 Grafana Password
 
 ```bash
 kubectl get secret stable-grafana -n prometheus -o jsonpath="{.data.admin-password}" | base64 -d
@@ -487,7 +573,7 @@ kubectl get secret stable-grafana -n prometheus -o jsonpath="{.data.admin-passwo
 
 ---
 
-## 📈 Grafana Dashboards
+# 📈 Grafana Dashboards
 
 - CPU Usage
 - Memory Usage
@@ -497,7 +583,7 @@ kubectl get secret stable-grafana -n prometheus -o jsonpath="{.data.admin-passwo
 
 ---
 
-## 🎯 Final Outcome
+# 🎯 Final Outcome
 
 - Fully Automated AWS DevOps Project
 - End-to-End CI/CD Pipeline
@@ -507,7 +593,7 @@ kubectl get secret stable-grafana -n prometheus -o jsonpath="{.data.admin-passwo
 
 ---
 
-## 👑 Author
+# 👑 Author
 
 **DevOps KINGG**
 
@@ -515,6 +601,6 @@ GitHub: https://github.com/KINGG777
 
 ---
 
-## ⭐ Support
+# ⭐ Support
 
 If this project helped you, give it a star on GitHub.
