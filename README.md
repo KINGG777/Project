@@ -136,7 +136,13 @@ Installed automatically:
 http://<JUMPHOST_PUBLIC_IP>:8080
 ```
 
-Install required plugins:
+Complete initial setup and create admin user.
+
+---
+
+## 🔌 Required Jenkins Plugins
+
+Install:
 
 - Git Plugin
 - Pipeline Stage View
@@ -214,24 +220,140 @@ const API_BASE_URL = "http://yourdomain.com";
 
 ---
 
-## 🚀 Jenkins Pipelines
+# 🚀 Jenkins Pipeline Creation
 
-Create these pipelines:
+## 📌 Create EKS Infrastructure Pipeline
 
-1. EKS Infrastructure Pipeline (`eks-terraform`)
-2. Frontend Pipeline
-3. Backend Pipeline
+1. Open Jenkins Dashboard  
+2. Click **New Item**  
+3. Enter Name:
 
-### Pipelines Perform:
+```text
+eks-terraform
+```
 
-- Code Checkout
-- Build Application
-- SonarQube Scan
-- Trivy Scan
-- Docker Build
-- Push to ECR
-- Update Kubernetes YAML
-- Push Changes to GitHub
+4. Select **Pipeline**
+5. Click **OK**
+
+### Configure:
+
+- Definition: Pipeline script from SCM
+- SCM: Git
+- Repository URL:
+
+```text
+https://github.com/KINGG777/Project.git
+```
+
+- Branch:
+
+```text
+*/main
+```
+
+- Script Path:
+
+```text
+eks-terraform/Jenkinsfile
+```
+
+Click **Save** → **Build Now**
+
+---
+
+## 📌 Create Frontend Pipeline
+
+1. Click **New Item**
+2. Enter Name:
+
+```text
+frontend-pipeline
+```
+
+3. Select **Pipeline**
+
+### Configure:
+
+- Definition: Pipeline script from SCM
+- SCM: Git
+- Repository URL:
+
+```text
+https://github.com/KINGG777/Project.git
+```
+
+- Branch:
+
+```text
+*/main
+```
+
+- Script Path:
+
+```text
+Jenkinsfile-frontend
+```
+
+Click **Save** → **Build Now**
+
+---
+
+## 📌 Create Backend Pipeline
+
+1. Click **New Item**
+2. Enter Name:
+
+```text
+backend-pipeline
+```
+
+3. Select **Pipeline**
+
+### Configure:
+
+- Definition: Pipeline script from SCM
+- SCM: Git
+- Repository URL:
+
+```text
+https://github.com/KINGG777/Project.git
+```
+
+- Branch:
+
+```text
+*/main
+```
+
+- Script Path:
+
+```text
+Jenkinsfile-backend
+```
+
+Click **Save** → **Build Now**
+
+---
+
+## 🔄 Pipeline Workflows
+
+### EKS Pipeline
+
+```text
+Terraform Init → Terraform Apply → Create EKS Cluster
+```
+
+### Frontend Pipeline
+
+```text
+Checkout → Sonar Scan → Trivy Scan → Docker Build → Push ECR → Update YAML
+```
+
+### Backend Pipeline
+
+```text
+Checkout → Sonar Scan → Trivy Scan → Docker Build → Push ECR → Update YAML
+```
 
 ---
 
