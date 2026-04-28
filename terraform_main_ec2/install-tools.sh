@@ -85,6 +85,20 @@ sudo yum install trivy -y
 docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
 
 
+#------------------Trivy----------
+cd /tmp
+
+VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | grep tag_name | cut -d '"' -f4)
+
+curl -LO https://github.com/aquasecurity/trivy/releases/download/${VERSION}/trivy_${VERSION#v}_Linux-64bit.tar.gz
+
+tar -xzf trivy_${VERSION#v}_Linux-64bit.tar.gz
+
+sudo mv trivy /usr/local/bin/
+
+sudo chmod +x /usr/local/bin/trivy
+
+trivy --version
 
 #---------------------------ArgoCD----------------
 kubectl create namespace argocd
