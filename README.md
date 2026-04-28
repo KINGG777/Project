@@ -1,98 +1,398 @@
-## 3 tier Application
+# 🚀 AWS Three-Tier DevOps Project on EKS
 
-✨This repository is created to learn and deploy  3-tier application on aws cloud. this project contain three layer Presentation, Application and database
+A complete production-style DevOps project demonstrating how to deploy a Three-Tier Application on AWS EKS using modern DevOps tools and GitOps practices.
 
-## 🏠 Architecture
-![Architecture of the application](architecture.gif)
+## 📌 Features
 
-## Tech stack
+- Infrastructure as Code with Terraform
+- CI/CD with Jenkins
+- Code Quality with SonarQube
+- Security Scanning with Trivy
+- Docker + Amazon ECR
+- Kubernetes Deployment on Amazon EKS
+- GitOps with ArgoCD
+- Monitoring with Prometheus & Grafana
+- DNS with Route53
+- Database with AWS RDS
 
-- React 
-- Nodejs
-- MySQL
+---
 
-## 🖥️ Installation of frontend
+## 🏗️ Project Architecture
 
-**Note**: You should have nodejs installed on your system. [Node.js](https://nodejs.org/)
+```text
+User
+ ↓
+Route53 Domain
+ ↓
+Frontend LoadBalancer
+ ↓
+Backend LoadBalancer
+ ↓
+AWS RDS MySQL
 
-👉 let install dependency to run react application
-
-```sh
-cd client
-npm install
+CI/CD Flow:
+GitHub → Jenkins → SonarQube → Trivy → Docker → ECR
+        ↓
+Update Kubernetes Manifests
+        ↓
+ArgoCD Sync
+        ↓
+Amazon EKS
 ```
 
-**Note**: you have to change one file for backend API. you will find that `src/pages/config.js`
+---
 
-```sh
-vim src/pages/config.js
+## 🛠️ Tech Stack
+
+- AWS EC2
+- AWS VPC
+- AWS EKS
+- AWS RDS
+- AWS ECR
+- Route53
+- Terraform
+- Jenkins
+- SonarQube
+- Trivy
+- Docker
+- Kubernetes
+- ArgoCD
+- Helm
+- Prometheus
+- Grafana
+- GitHub
+
+---
+
+## 📂 Clone Repository
+
+```bash
+git clone https://github.com/KINGG777/Project.git
+cd Project
 ```
+
+---
+
+## ⚙️ Configure AWS CLI
+
+```bash
+aws configure
+```
+
+Use:
+
+- AWS Access Key
+- AWS Secret Key
+- Region: `us-east-1`
+
+---
+
+## 🏗️ Deploy Infrastructure
+
+```bash
+cd terraform_main_ec2
+terraform init
+terraform apply --auto-approve
+```
+
+Update these values before apply:
+
+- Key Pair Name
+- S3 Bucket Name
+
+---
+
+## ✅ Terraform Creates
+
+- VPC
+- Public / Private Subnets
+- Internet Gateway
+- NAT Gateway
+- Security Groups
+- Jump Host EC2
+- AWS RDS MySQL
+- Amazon EKS Cluster (`project-eks`)
+
+---
+
+## 🖥️ Jump Host Auto Setup
+
+Installed automatically:
+
+- Docker
+- Jenkins
+- Git
+- Java
+- Maven
+- Terraform
+- Helm
+- Trivy
+
+---
+
+## 🔐 Jenkins Access
+
+```text
+http://<JUMPHOST_PUBLIC_IP>:8080
+```
+
+Install required plugins:
+
+- Git Plugin
+- Pipeline Stage View
+- Eclipse Temurin Installer
+- SonarQube Scanner
+- NodeJS Plugin
+
+---
+
+## 🔧 Jenkins Credentials
+
+Add Secret Text credentials:
+
+| ID | Value |
+|----|------|
+| ACCOUNT_ID | AWS Account ID |
+| ECR_REPO1 | frontend |
+| ECR_REPO2 | backend |
+| git-token | GitHub Token |
+| sonar-token | Sonar Token |
+
+---
+
+## 🔍 SonarQube Setup
+
+```text
+http://<SERVER_IP>:9000
+```
+
+Create projects:
+
+- three-tier-frontend
+- three-tier-backend
+
+Webhook:
+
+```text
+http://<JENKINS_IP>:8080/sonarqube-webhook/
+```
+
+---
+
+## 🐳 Create ECR Repositories
+
+- frontend
+- backend
+
+---
+
+## 🌐 Route53 Setup
+
+Create hosted zone for your domain.
+
+Example:
+
+```text
+yourdomain.com
+```
+
+---
+
+## ⚠️ Update Frontend API URL
+
+File:
+
+```text
+client/src/pages/config.js
+```
+
+Change:
 
 ```javascript
-// const API_BASE_URL = "http://25.41.26.237:80"; // on live backend server which is running on port 80
-const API_BASE_URL = "http://localhost:portNumber";
-export default API_BASE_URL;
-```
-make sure you EDIT above file depends on your scenario
-
-
-```sh
-npm run build 
+const API_BASE_URL = "http://yourdomain.com";
 ```
 
-above command creat optimize build of the application in client folder. `build/` you will find all the files that you can serve through **Apache** or **Nginx**
-that's the whole setup of the frontend
+---
 
-##  🖥️ ️Installation of backend
+## 🚀 Jenkins Pipelines
 
-**Note**: You should have nodejs installed on your system. [Node.js](https://nodejs.org/)
+Create these pipelines:
 
-👉 let install dependency to run Nodejs  API
+1. EKS Infrastructure Pipeline (`eks-terraform`)
+2. Frontend Pipeline
+3. Backend Pipeline
 
-```sh
-cd backend
-npm install
-```
-Now we need to create .env file that holds all the configuration details of the backend. you should be in backend directory
+### Pipelines Perform:
 
-```sh
-vim .env
-```
-add below content 
+- Code Checkout
+- Build Application
+- SonarQube Scan
+- Trivy Scan
+- Docker Build
+- Push to ECR
+- Update Kubernetes YAML
+- Push Changes to GitHub
 
-```javascript
-DB_HOST=localhost or URL_of_RDS
-DB_USERNAME=user_name_of_MySQL
-DB_PASSWORD=passwod_of_my_sql
-PORT=3306
-```
-**Note** : please change above file depending on your setup. like you may use RDS(AWS) or Local mysql-server on your system. your mysql contain database with the name of `test` and it should has `books` table. You can you test.sql to create table 
+---
 
+## ☸️ Configure kubectl from Jump Host
 
-```sh
-mysql -h <<RDS_ENDPOINT OR localhost>> -u <<USER_NAME>> -p<<PASSWORD>>
+```bash
+ssh -i key.pem ec2-user@<JUMPHOST_PUBLIC_IP>
 
-CREATE DATABASE test;
+aws eks update-kubeconfig --region us-east-1 --name project-eks
 
-mysql -h <<RDS_ENDPOINT OR localhost>> -u <<USER_NAME>> -p<<PASSWORD>> test < test.sql
+kubectl get nodes
 ```
 
+---
 
-please install pm2 if you want to run on cloud. you may need sudo privilages to installed it because we are going to installed globally.
+## ☸️ Create Namespaces
 
-```sh
-npm install -g pm2
+```bash
+kubectl create namespace eks
+kubectl create namespace argocd
+kubectl create namespace prometheus
 ```
 
-now you can run this application. make sure you are in backend directory
+---
 
+## 🚀 Install ArgoCD
 
-```sh
-pm2 start index.js --name "backendAPI"
+```bash
+kubectl apply --server-side -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
-above command will start node server on port 80, you can modify the port number in `index.js` file
+Expose ArgoCD:
 
-✈️ Now we are Ready to see the application
+```bash
+kubectl patch svc argocd-server -n argocd -p '{"spec":{"type":"LoadBalancer"}}'
+kubectl get svc -n argocd
+```
 
-**Thank you so much for reading..😅**
+---
+
+## 🔐 Get ArgoCD Password
+
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+Login:
+
+- Username: `admin`
+
+---
+
+## 📦 Create ArgoCD Application
+
+Use:
+
+- GitHub Repo URL
+- Path: `kubernetes-files`
+- Namespace: `eks`
+
+---
+
+## 🗄️ Configure Database Secret
+
+```bash
+echo -n "your-rds-endpoint.amazonaws.com" | base64
+```
+
+Paste encoded value into:
+
+```text
+kubernetes-files/secret.yaml
+```
+
+---
+
+## 📥 Insert Dummy Data into RDS
+
+```bash
+sudo dnf install mariadb105 -y
+
+mysql -h <RDS-ENDPOINT> -u admin -pPASSWORD < test.sql
+```
+
+---
+
+## 📊 Monitoring Setup
+
+```bash
+helm repo add stable https://charts.helm.sh/stable
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+kubectl create namespace prometheus
+
+helm install stable prometheus-community/kube-prometheus-stack -n prometheus
+```
+
+---
+
+## ⚠️ If Pods Pending
+
+```bash
+eksctl scale nodegroup \
+--cluster project-eks \
+--region us-east-1 \
+--name project-node-group \
+--nodes 3
+
+kubectl get pods -n prometheus -w
+
+kubectl rollout restart deployment stable-grafana -n prometheus
+```
+
+---
+
+## 🌐 Expose Monitoring Services
+
+```bash
+kubectl patch svc stable-kube-prometheus-sta-prometheus -n prometheus -p '{"spec":{"type":"LoadBalancer"}}'
+
+kubectl patch svc stable-grafana -n prometheus -p '{"spec":{"type":"LoadBalancer"}}'
+```
+
+---
+
+## 🔐 Grafana Password
+
+```bash
+kubectl get secret stable-grafana -n prometheus -o jsonpath="{.data.admin-password}" | base64 -d
+```
+
+---
+
+## 📈 Grafana Dashboards
+
+- CPU Usage
+- Memory Usage
+- Pod Metrics
+- Cluster Health
+- Node Monitoring
+
+---
+
+## 🎯 Final Outcome
+
+- Fully Automated AWS DevOps Project
+- End-to-End CI/CD Pipeline
+- GitOps Kubernetes Deployment
+- Secure Container Delivery
+- Real-Time Monitoring Stack
+
+---
+
+## 👑 Author
+
+**DevOps KINGG**
+
+GitHub: https://github.com/KINGG777
+
+---
+
+## ⭐ Support
+
+If this project helped you, give it a star on GitHub.
