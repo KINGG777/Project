@@ -1,0 +1,56 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "EKS Health Checker",
+    "version": "1.0.0",
+    "description": "Checks health status of an project eks including node groups, deployments, and pod restarts"
+  },
+  "paths": {
+    "/fetch_service_health": {
+      "get": {
+        "summary": "Check project eks health",
+        "description": "Checks the health of an project eks — cluster status, node group health, unhealthy or scaled-down deployments, and crashing pods. Use this when the user asks if services are running, if pods are healthy, if anything is down, or for a general system health check. Default cluster is project-eks and default namespace is eks.",
+        "operationId": "fetch_service_health",
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "in": "query",
+            "required": false,
+            "description": "project-eks name to check. Defaults to project-eks.",
+            "schema": {
+              "type": "string",
+              "default": "project-eks"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "query",
+            "required": false,
+            "description": "Kubernetes namespace to check deployments and pods in. Defaults to eks.",
+            "schema": {
+              "type": "string",
+              "default": "eks"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "project eks health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "overall_healthy": { "type": "boolean" },
+                    "details": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

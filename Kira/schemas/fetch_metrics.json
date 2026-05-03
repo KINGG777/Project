@@ -1,0 +1,58 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Prometheus Metrics Fetcher",
+    "version": "1.0.0",
+    "description": "Fetches performance metrics from Prometheus for EKS workloads"
+  },
+  "paths": {
+    "/fetch_cloudwatch_metrics": {
+      "get": {
+        "summary": "Fetch performance metrics from Prometheus",
+        "description": "Retrieves Kubernetes and application metrics from Prometheus. Use when checking pod CPU usage, memory usage, restarts, or deployment health for the 3-tier EKS application.",
+        "operationId": "fetch_cloudwatch_metrics",
+        "parameters": [
+          {
+            "name": "metric_name",
+            "in": "query",
+            "required": true,
+            "description": "Metric name to query. Supported values: pod_cpu_utilization, pod_memory_utilization, pod_restarts, deployment_replicas_available, deployment_replicas_unavailable",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "namespace",
+            "in": "query",
+            "required": false,
+            "description": "Kubernetes namespace. Default is eks.",
+            "schema": { "type": "string", "default": "eks" }
+          },
+          {
+            "name": "hours_back",
+            "in": "query",
+            "required": false,
+            "description": "How many hours of data to analyze.",
+            "schema": { "type": "string", "default": "1" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Metric data points",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "metric": { "type": "string" },
+                    "ns": { "type": "string" },
+                    "data": { "type": "array" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
